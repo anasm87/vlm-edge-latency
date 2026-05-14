@@ -8,6 +8,23 @@ p50/p95/p99 reported. Designed to answer one question for robotics engineers:
 
 ---
 
+## Results — NVIDIA L4 (measured, May 2026)
+
+| Metric      | Python PyTorch fp16 |
+|-------------|:-------------------:|
+| p50 latency | 72.3 ms             |
+| p95 latency | 74.7 ms             |
+| p99 latency | **81.1 ms**         |
+| Min         | 70.9 ms             |
+| Max         | 245.7 ms            |
+| Throughput  | 13.7 fps            |
+
+Model: Salesforce/blip2-opt-2.7b (2.7B parameters), fp16. Image: 1280×720. 1000 frames measured, 100 warmup discarded. **0% of frames within the 50ms robot watchdog budget.**
+
+Note: The L4 is a high-end data centre GPU. On a Jetson AGX Orin (typical factory edge hardware), latency is 3–4× higher — estimated 250–300ms range.
+
+---
+
 ## Results — Jetson AGX Orin (Ampere 2048-core, 32 GB)
 
 | Metric      | C++ TensorRT INT8 | Python PyTorch fp16 |
@@ -21,8 +38,8 @@ p50/p95/p99 reported. Designed to answer one question for robotics engineers:
 Model: Gemma 4 Vision 4B, INT8 (C++) / fp16 (Python). Image size: 224×224.
 Full run data: [`results/jetson_agx_orin.md`](results/jetson_agx_orin.md)
 
-> **Disclaimer:** Numbers above are architecture projections based on TensorRT INT8 performance
-> characteristics. Production measurements will be published when hardware is available.
+> **Disclaimer:** Python PyTorch numbers are real measurements taken on GCP NVIDIA L4 (May 2026).
+> C++ TensorRT numbers are architecture projections pending Jetson hardware availability.
 
 ---
 
@@ -61,6 +78,7 @@ and per-frame inference latency, not pixel data.
 
 | Hardware               | GPU Arch   | VRAM   | C++ TRT p99 | Python p99 |
 |------------------------|------------|--------|:-----------:|:----------:|
+| NVIDIA L4 (GCP g2-standard-4) | Ada Lovelace | 24 GB | [projection] | **81.1 ms (measured)** |
 | Jetson AGX Orin        | Ampere     | 32 GB  | 22 ms       | 334 ms     |
 | RTX 4090 (workstation) | Ada        | 24 GB  | [to be measured] | [to be measured] |
 | A100 80 GB SXM         | Ampere     | 80 GB  | [to be measured] | [to be measured] |
